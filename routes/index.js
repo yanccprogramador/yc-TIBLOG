@@ -1,0 +1,227 @@
+var express = require('express');
+ var router = express.Router();
+ const pg = require('pg');
+ const connectionString = process.env.DATABASE_URL;
+ router.get('/meu/:Dono',function(req,res,next){
+   var results = [];
+   // Get a Postgres client from the connection pool
+   pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+   const id={dono:req.params.Dono};
+   // SQL Query > Select Data
+   const query=client.query("select * from artigos where Dono=$1",[id.dono],(err, resp) => {
+   if (err) {
+     console.log(err.stack);
+     return res.json(err.stack);
+   } else {
+     done();
+     return res.status(200).json({success:true,rows:resp.rows,where:true,numLinhas:resp.rowCount});
+   }});
+   });
+      //return res.status(200).json({success:true,rows:results});
+  });
+ router.get('/usuario',function(req,res,next){
+    pg.connect(connectionString, (err, client, done) => {
+     // Handle connection errors
+     if(err) {
+       done();
+       console.log(err);
+       return res.status(500).json({success: false, data: err});
+     }
+     const query=client.query("Select * from users",(err, resp) => {
+     if (err) {
+       console.log(err.stack);
+       return res.json(err.stack);
+     } else {
+       done();
+       return res.status(200).json({success:true,rows:resp.rows,where:false,numLinhas:resp.rowCount});
+     }});
+     });
+ });
+ router.get('/usuario/:login',function(req,res,next){
+   pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+    const par={login:req.params.login};
+    const query=client.query("select * from users where login=$1",[par.login],(err, resp) => {
+    if (err) {
+      console.log(err.stack);
+      return res.json(err.stack);
+    } else {
+      done();
+      return res.status(200).json({success:true,rows:resp.rows,where:true,numLinhas:resp.rowCount});
+    }});
+  });
+ });
+ router.post('/usuario/',function(req,res,next){
+   pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+    const data = {login: req.body.login, senha: req.body.senha,nome:req.body.nome};
+    const query=client.query("Insert into users values($1,$2,$3)",[data.login,data.senha,data.nome],(err, resp) => {
+      if (err) {
+      console.log(err.stack);
+      return res.json(err.stack);
+    } else {
+      done();
+      return res.status(201).json({success: true, data: "inserted"});
+    }});
+  });
+ });
+ router.delete('/usuario/:login',function(req,res,next){
+   pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+    const id={logim:req.params.login};
+    const query=client.query("delete from users where login=$1",[id.login],(err, resp) => {
+      if (err) {
+      console.log(err.stack);
+      return res.json(err.stack);
+    } else {
+      done();
+      return res.status(201).json({success: true, data: "deleted"});
+    }});
+  });
+ });
+ router.put('/usuario/:login',function(req,res,next){
+   pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+    const id={login:req.params.login};
+    const data2 = {nome: req.body.nome, senha: req.body.senha};
+    const query=client.query("UPDATE users SET nome = $1 , senha = $2 where login= $3 ",[data2.nome,data2.senha,id.login],(err, resp) => {
+      if (err) {
+      console.log(err.stack);
+      return res.json(err.stack);
+    } else {
+      done();
+      return res.status(201).json({success: true, data: "updated"});
+    }});
+  });
+ });
+router.get('/:id',function(req,res,next){
+  var results = [];
+  // Get a Postgres client from the connection pool
+  pg.connect(connectionString, (err, client, done) => {
+   // Handle connection errors
+   if(err) {
+     done();
+     console.log(err);
+     return res.status(500).json({success: false, data: err});
+   }
+  const id={id:req.params.id};
+  // SQL Query > Select Data
+  const query=client.query("select * from artigos where Id=$1",[id.id],(err, resp) => {
+  if (err) {
+    console.log(err.stack);
+    return res.json(err.stack);
+  } else {
+    done();
+    return res.status(200).json({success:true,rows:resp.rows,where:true,numLinhas:resp.rowCount});
+  }});
+  });
+     //return res.status(200).json({success:true,rows:results});
+ });
+
+ router.get('/',(req, res, next) => {
+    var results = [];
+    pg.connect(connectionString, (err, client, done) => {
+     // Handle connection errors
+     if(err) {
+       done();
+       console.log(err);
+       return res.status(500).json({success: false, data: err});
+     }
+    // SQL Query > Select Data
+     const query=client.query("SELECT * FROM artigos",(err, resp) => {
+    if (err) {
+      console.log(err.stack);
+      return res.json(err.stack);
+    } else {
+      done();
+      return res.status(200).json({success:true,rows:resp.rows,where:false,numLinhas:resp.rowCount});
+    }});
+    });
+       //return res.status(200).json({success:true,rows:results});
+  });
+ router.post('/',function(req,res,next){
+    pg.connect(connectionString, (err, client, done) => {
+     // Handle connection errors
+     if(err) {
+       done();
+       console.log(err);
+       return res.status(500).json({success: false, data: err});
+     }
+     const data = {title: req.body.title, dono: req.body.dono,artigo:req.body.artigo};
+    const query=client.query("INSERT INTO artigos(Titulo,Dono,artigo) VALUES($1,$2,$3)",[data.title,data.dono,data.artigo],(err, resp) => {
+      if (err) {
+      console.log(err.stack);
+      return res.json(err.stack);
+    } else {
+      done();
+      return res.status(201).json({success: true, data: "inserted"});
+    }});
+  });
+});
+ router.delete('/:id',function(req,res,next){
+   pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+    const id={id:req.params.id};
+    const query=client.query("delete from artigos where Id=$1",[id.id],(err, resp) => {
+      if (err) {
+      console.log(err.stack);
+      return res.json(err.stack);
+    } else {
+      done();
+      return res.status(201).json({success: true, data: "deleted"});
+    }});
+  });
+ });
+ router.put('/:id',function(req,res,next){
+   pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+    const id={id:req.params.id};
+    const data2 = {title: req.body.title, dono: req.body.dono,artigo:req.body.artigo};
+    const query=client.query("UPDATE artigos SET titulo = $1 , dono = $2, artigo = $3  where id= $4 ",[data2.title,data2.dono,data2.artigo,id.id],(err, resp) => {
+      if (err) {
+      console.log(err.stack);
+      return res.json(err.stack);
+    } else {
+      done();
+      return res.status(201).json({success: true, data: "updated"});
+    }});
+  });
+ });
+
+ module.exports=router;
