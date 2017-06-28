@@ -89,7 +89,7 @@ var express = require('express');
       console.log(err);
       return res.status(500).json({success: false, data: err});
     }
-    const id={logim:req.params.login};
+    const id={login:req.params.login};
     const query=client.query("delete from users where login=$1",[id.login],(err, resp) => {
       if (err) {
       console.log(err.stack);
