@@ -14,7 +14,7 @@ var express = require('express');
     }
    const id={dono:req.params.Dono};
    // SQL Query > Select Data
-   const query=client.query("select * from artigos where Dono=$1",[id.dono],(err, resp) => {
+   const query=client.query("select * from artigos where Dono=$1 order by id desc",[id.dono],(err, resp) => {
    if (err) {
      console.log(err.stack);
      return res.json(err.stack);
@@ -154,7 +154,7 @@ router.get('/:id',function(req,res,next){
        return res.status(500).json({success: false, data: err});
      }
     // SQL Query > Select Data
-     const query=client.query("SELECT * FROM artigos",(err, resp) => {
+     const query=client.query("SELECT * FROM artigos order by id desc",(err, resp) => {
     if (err) {
       console.log(err.stack);
       return res.json(err.stack);
