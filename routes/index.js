@@ -23,6 +23,7 @@ router.get('/search/:pc',function(req,res,next){
      return res.status(200).json({success:true,rows:resp.rows,where:true,numLinhas:resp.rowCount});
    }});
    });
+  });
  router.get('/meu/:Dono',function(req,res,next){
    var results = [];
    // Get a Postgres client from the connection pool
