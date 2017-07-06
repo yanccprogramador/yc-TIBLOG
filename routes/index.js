@@ -2,6 +2,26 @@ var express = require('express');
  var router = express.Router();
  const pg = require('pg');
  const connectionString = process.env.DATABASE_URL;
+router.get('/search/:pc',function(req,res,next){
+   var results = [];
+   // Get a Postgres client from the connection pool
+   pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+   // SQL Query > Select Data
+   const query=client.query("select * from artigos where artigo like '%$1%' or titulo like '%$1%'  order by id desc",[req.params.pc],(err, resp) => {
+   if (err) {
+     console.log(err.stack);
+     return res.json(err.stack);
+   } else {
+     done();
+     return res.status(200).json({success:true,rows:resp.rows,where:true,numLinhas:resp.rowCount});
+   }});
+   });
  router.get('/meu/:Dono',function(req,res,next){
    var results = [];
    // Get a Postgres client from the connection pool
