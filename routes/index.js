@@ -14,7 +14,7 @@ router.get('/search/:pc',function(req,res,next){
     }
      const search={pc:req.params.pc};
    // SQL Query > Select Data
-    const query=client.query("select * from artigos where artigo LIKE '%' || $1 || '%' OR Titulo LIKE '%' || $1 || '%' order by id desc",[search.pc],(err, resp) => {
+    const query=client.query("select * from artigos where artigo ~*$1 OR Titulo ~*$1 order by id desc",[search.pc],(err, resp) => {
    if (err) {
      console.log(err.stack);
      return res.json(err.stack);
