@@ -234,8 +234,8 @@ router.get('/:id',function(req,res,next){
       return res.status(500).json({success: false, data: err});
     }
     const id={id:req.params.id};
-    const data2 = {title: req.body.title, dono: req.body.dono,artigo:req.body.artigo};
-    const query=client.query("UPDATE artigos SET titulo = $1 , dono = $2, artigo = $3  where id= $4 ",[data2.titulo,data2.dono,data2.artigo,id.id],(err, resp) => {
+    const data2 = {title: req.body.titulo, dono: req.body.dono,artigo:req.body.artigo};
+    const query=client.query("UPDATE artigos SET titulo = $1 , dono = $2, artigo = $3  where id= $4 ",[data2.title,data2.dono,data2.artigo,id.id],(err, resp) => {
       if (err) {
       console.log(err.stack);
       return res.json(err.stack);
