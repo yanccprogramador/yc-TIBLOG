@@ -14,7 +14,6 @@ router.get('/search/:pc', function(req, res, next) {
             return res.status(500).json({ success: false, data: err });
         }
         const search = { pc: req.params.pc };
-        // SQL Query > Select Data
         const query = client.query("select * from artigos where artigo ~*$1 OR Titulo ~*$1 order by id desc", [search.pc], (err, resp) => {
             if (err) {
                 console.log(err.stack);
