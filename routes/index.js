@@ -104,7 +104,7 @@ router.post('/usuario/logar/', function(req, res, next) {
             } else {
                 done();
                  
-                if (ssha256.check(resp.rows[0].senha,data.semha)){
+                if (ssha256.check(resp.rows[0].senha,data.senha)){
                     return res.status(201).json({ success: true, data: "logado" });
                 } else {
                     return res.status(205).json({ success: false,data: "deslogado" });
