@@ -106,7 +106,7 @@ router.post('/usuario/logar/', function(req, res, next) {
                 if (resp.rows.senha == data.senha) {
                     return res.status(201).json({ success: true, data: "logado" });
                 } else {
-                    return res.status(205).json({ success: false, data: "nao logado" });
+                    return res.status(205).json({ success: false,data: "deslogado" });
                 }
 
             }
