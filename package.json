@@ -15,7 +15,7 @@
     "express-http-to-https": "^1.1.2",
     "jade": "~1.11.0",
     "morgan": "~1.8.1",
-    "password-hash-and-salt": "^0.1.4",
+    "node-ssha256": "^0.1.1",
     "pg": "^6.2.4",
     "serve-favicon": "~2.4.2"
   }

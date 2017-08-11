@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const pg = require('pg');
-var password = require('password-hash-and-salt');
+var ssha256 = require('node-ssha256');
 const connectionString = process.env.DATABASE_URL;
 router.get('/search/:pc', function(req, res, next) {
     var results = [];
@@ -97,14 +97,7 @@ router.post('/usuario/logar/', function(req, res, next) {
             console.log(err);
             return res.status(500).json({ success: false, data: err });
         }
-        const data = { login: req.body.login, senha: req.body.senha };
-        password(data.senha).hash((error, hash) => {
-            if (error) {
-
-            } else {
-                data.senha = hash;
-            }
-        });
+        const data = { login: req.body.login, senha: ssha256.create(req.body.senha) };
         const query = client.query("select senha from users where login=$1", [data.login], (err, resp) => {
             if (err) {
                 console.log(err.stack);
@@ -129,14 +122,7 @@ router.post('/usuario/', function(req, res, next) {
             console.log(err);
             return res.status(500).json({ success: false, data: err });
         }
-        const data = { login: req.body.login, senha: req.body.senha, nome: req.body.nome };
-        password(data.senha).hash((error, hash) => {
-            if (error) {
-
-            } else {
-                data.senha = hash;
-            }
-        });
+        const data = { login: req.body.login, senha: ssha256.create(req.body.senha), nome: req.body.nome };
         const query = client.query("Insert into users values($1,$2,$3)", [data.login, data.senha, data.nome], (err, resp) => {
             if (err) {
                 console.log(err.stack);
