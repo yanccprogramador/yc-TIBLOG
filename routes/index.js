@@ -162,14 +162,7 @@ router.put('/usuario/:login', function(req, res, next) {
             return res.status(500).json({ success: false, data: err });
         }
         const id = { login: req.params.login };
-        const data2 = { nome: req.body.nome, senha: req.body.senha };
-        password(data2.senha).hash((error, hash) => {
-            if (error) {
-
-            } else {
-                data2.senha = hash;
-            }
-        });
+        const data2 = { nome: req.body.nome, senha: ssha256.create(req.body.senha) };
         const query = client.query("UPDATE users SET nome = $1 , senha = $2 where login= $3 ", [data2.nome, data2.senha, id.login], (err, resp) => {
             if (err) {
                 console.log(err.stack);
