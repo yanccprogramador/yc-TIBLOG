@@ -97,14 +97,18 @@ router.post('/usuario/logar/', function(req, res, next) {
             return res.status(500).json({ success: false, data: err });
         }
         const data = { login: req.body.login, senha: ssha256.create(req.body.senha) };
-        const query = client.query("select senha from users where login=$1 and senha=$2", [data.login,data.senha], (err, resp) => {
+        const query = client.query("select senha from users where login=$1", [data.login], (err, resp) => {
             if (err) {
                 console.log(err.stack);
                 return res.json(err.stack);
             } else {
                 done();
                  
-                    return res.status(201).json(resp);
+                if (ssha256.check(senha,data.semha)){
+                    return res.status(201).json({ success: true, data: "logado" });
+                } else {
+                    return res.status(205).json({ success: false,data: "deslogado" });
+                }
               
                   
                 
