@@ -57,13 +57,13 @@ router.get('/usuario', function(req, res, next) {
             console.log(err);
             return res.status(500).json({ success: false, data: err });
         }
-        const query = client.query("Select * from users", (err, resp) => {
+        const query = client.query("Select nome from users", (err, resp) => {
             if (err) {
                 console.log(err.stack);
                 return res.json(err.stack);
             } else {
                 done();
-                return res.status(200).json({ success: true, rows: resp.rows.nome, where: false, numLinhas: resp.rowCount });
+                return res.status(200).json({ success: true, rows: resp.rows, where: false, numLinhas: resp.rowCount });
             }
         });
     });
@@ -77,13 +77,13 @@ router.get('/usuario/:login', function(req, res, next) {
             return res.status(500).json({ success: false, data: err });
         }
         const par = { login: req.params.login };
-        const query = client.query("select * from users where login=$1", [par.login], (err, resp) => {
+        const query = client.query("select nome from users where login=$1", [par.login], (err, resp) => {
             if (err) {
                 console.log(err.stack);
                 return res.json(err.stack);
             } else {
                 done();
-                return res.status(200).json({ success: true, rows: resp.rows.nome, where: true, numLinhas: resp.rowCount });
+                return res.status(200).json({ success: true, rows: resp.rows, where: true, numLinhas: resp.rowCount });
             }
         });
     });
