@@ -103,7 +103,7 @@ router.post('/usuario/logar/', function(req, res, next) {
                 return res.json(err.stack);
             } else {
                 done();
-                if (resp.rows[0] == data.senha) {
+                if (resp.rows[0].senha == data.senha) {
                     return res.status(201).json({ success: true, data: "logado" });
                 } else {
                     return res.status(205).json({ success: false,data: "deslogado" });
