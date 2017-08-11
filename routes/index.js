@@ -103,7 +103,7 @@ router.post('/usuario/logar/', function(req, res, next) {
                 return res.json(err.stack);
             } else {
                 done();
-                return res.json("senha1":resp.rows[0].senha,"senha2":data.senha )
+                return res.json("senha1":resp.rows[0].senha,"senha2":this.data.senha )
 
             }
         });
