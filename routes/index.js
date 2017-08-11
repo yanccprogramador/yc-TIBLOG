@@ -103,7 +103,7 @@ router.post('/usuario/logar/', function(req, res, next) {
                 return res.json(err.stack);
             } else {
                 done();
-                var senha==ssha256.create(req.body.senha);
+                var senha=ssha256.create(req.body.senha);
                  if (resp.rows[0].senha==senha) {
                     return res.status(201).json({ success: true, data: "logado" });
                 } else {
