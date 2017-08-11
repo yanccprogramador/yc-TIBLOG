@@ -21,7 +21,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json({ type: 'application/json' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(redirectToHTTPS([''], ['']));
+app.use(redirectToHTTPS.redirectToHTTPS([''], ['']));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
