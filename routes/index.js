@@ -91,23 +91,27 @@ router.post('/usuario/logar/', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        const data = { login: req.body.login, senha: ssha256.create(req.body.senha) };
-        const query = client.query("select senha from users where login=$1", [data.login], (err, resp) => {
-                if (err) {
-                return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
-                done();
-                 }        
-                if (ssha256.check(resp.rows[0].senha,req.body.senha)){
-                    return res.status(201).json({ success: true, data: "logado" });
-                } else {
-                    return res.status(200).json({ success: false,data: "deslogado" });
-                }
-              
-                  
-                
+        if(!req.body && req.body!=null){
+            const data = { login: req.body.login, senha: ssha256.create(req.body.senha) };
+            const query = client.query("select senha from users where login=$1", [data.login], (err, resp) => {
+                    if (err) {
+                    return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
+                    done();
+                     }        
+                    if (ssha256.check(resp.rows[0].senha,req.body.senha)){
+                        return res.status(201).json({ success: true, data: "logado" });
+                    } else {
+                        return res.status(200).json({ success: false,data: "deslogado" });
+                    }
 
-           
-        });
+
+
+
+
+            });
+        }else{
+             return res.status(500).json({data:"Mande todos os dados requeridos!"});
+        }
         
     });
 });
@@ -118,16 +122,20 @@ router.post('/usuario/', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        const data = { login: req.body.login, senha: ssha256.create(req.body.senha), nome: req.body.nome };
-        const query = client.query("Insert into users values($1,$2,$3)", [data.login, data.senha, data.nome], (err, resp) => {
-            if (err) {
-                console.log(err.stack);
-                return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
-            } else {
-                done();
-                return res.status(201).json({ success: true, data: "inserted" });
-            }
-        });
+        if(!req.body && req.body!=null){
+            const data = { login: req.body.login, senha: ssha256.create(req.body.senha), nome: req.body.nome };
+            const query = client.query("Insert into users values($1,$2,$3)", [data.login, data.senha, data.nome], (err, resp) => {
+                if (err) {
+                    console.log(err.stack);
+                    return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
+                } else {
+                    done();
+                    return res.status(201).json({ success: true, data: "inserted" });
+                }
+            });
+        }else{
+             return res.status(500).json({data:"Mande todos os dados requeridos!"});
+        }    
     });
 });
 router.delete('/usuario/:login', function(req, res, next) {
@@ -156,17 +164,21 @@ router.put('/usuario/:login', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        const id = { login: req.params.login };
-        const data2 = { nome: req.body.nome, senha: ssha256.create(req.body.senha) };
-        const query = client.query("UPDATE users SET nome = $1 , senha = $2 where login= $3 ", [data2.nome, data2.senha, id.login], (err, resp) => {
-            if (err) {
-                console.log(err.stack);
-                return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
-            } else {
-                done();
-                return res.status(201).json({ success: true, data: "updated" });
-            }
-        });
+        if(!req.body && req.body!=null){
+            const id = { login: req.params.login };
+            const data2 = { nome: req.body.nome, senha: ssha256.create(req.body.senha) };
+            const query = client.query("UPDATE users SET nome = $1 , senha = $2 where login= $3 ", [data2.nome, data2.senha, id.login], (err, resp) => {
+                if (err) {
+                    console.log(err.stack);
+                    return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
+                } else {
+                    done();
+                    return res.status(201).json({ success: true, data: "updated" });
+                }
+            });
+        }else{
+             return res.status(500).json({data:"Mande todos os dados requeridos!"});
+        }
     });
 });
 router.get('/:id', function(req, res, next) {
@@ -221,16 +233,20 @@ router.post('/', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        const data = { title: req.body.title, dono: req.body.dono, artigo: req.body.artigo };
-        const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo) VALUES($1,$2,$3)", [data.title, data.dono, data.artigo], (err, resp) => {
-            if (err) {
-                console.log(err.stack);
-                return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
-            } else {
-                done();
-                return res.status(201).json({ success: true, data: "inserted" });
-            }
-        });
+        if(!req.body && req.body!=null){
+            const data = { title: req.body.title, dono: req.body.dono, artigo: req.body.artigo };
+            const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo) VALUES($1,$2,$3)", [data.title, data.dono, data.artigo], (err, resp) => {
+                if (err) {
+                    console.log(err.stack);
+                    return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
+                } else {
+                    done();
+                    return res.status(201).json({ success: true, data: "inserted" });
+                }
+            });
+        }else{
+             return res.status(500).json({data:"Mande todos os dados requeridos!"});
+        }    
     });
 });
 router.delete('/:id', function(req, res, next) {
@@ -259,17 +275,25 @@ router.put('/:id', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        const id = { id: req.params.id };
-        const data2 = { title: req.body.titulo, dono: req.body.dono, artigo: req.body.artigo };
-        const query = client.query("UPDATE artigos SET titulo = $1 , dono = $2, artigo = $3  where id= $4 ", [data2.title, data2.dono, data2.artigo, id.id], (err, resp) => {
-            if (err) {
-                console.log(err.stack);
-                return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
-            } else {
-                done();
-                return res.status(201).json({ success: true, data: "updated" });
-            }
-        });
+         if (err) {
+            done();
+            return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
+        }
+        if(!req.body && req.body!=null){
+            const id = { id: req.params.id };
+            const data2 = { title: req.body.titulo, dono: req.body.dono, artigo: req.body.artigo };
+            const query = client.query("UPDATE artigos SET titulo = $1 , dono = $2, artigo = $3  where id= $4 ", [data2.title, data2.dono, data2.artigo, id.id], (err, resp) => {
+                if (err) {
+                    console.log(err.stack);
+                    return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
+                } else {
+                    done();
+                    return res.status(201).json({ success: true, data: "updated" });
+                }
+            });
+        }else{
+             return res.status(500).json({data:"Mande todos os dados requeridos!"});
+        } 
     });
 });
 
