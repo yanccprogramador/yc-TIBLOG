@@ -93,11 +93,10 @@ router.post('/usuario/logar/', function(req, res, next) {
         }
         const data = { login: req.body.login, senha: ssha256.create(req.body.senha) };
         const query = client.query("select senha from users where login=$1", [data.login], (err, resp) => {
-         if (err) {
-                console.log(err.stack);
+                if (err) {
                 return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
                 done();
-         }        
+                 }        
                 if (ssha256.check(resp.rows[0].senha,req.body.senha)){
                     return res.status(201).json({ success: true, data: "logado" });
                 } else {
@@ -107,8 +106,9 @@ router.post('/usuario/logar/', function(req, res, next) {
                   
                 
 
-            }
+           
         });
+        
     });
 });
 router.post('/usuario/', function(req, res, next) {
