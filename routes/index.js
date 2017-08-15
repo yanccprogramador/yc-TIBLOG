@@ -91,8 +91,31 @@ router.post('/usuario/logar/', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        return res.json(req.headers);
-        
+        if(req.headers['content-type']!="application/json"){
+        if(!req.body.login && !req.body.senha){
+            const data = { login: req.body.login, senha: ssha256.create(req.body.senha) };
+            const query = client.query("select senha from users where login=$1", [data.login], (err, resp) => {
+                    if (err) {
+                    return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
+                    done();
+                     }        
+                   return res.status(200).json({ success: false,data:resp.rows })
+
+                     if (ssha256.check(resp.rows[0].senha,req.body.senha)){
+                        return res.status(201).json({ success: true, data: "logado" });
+                    } else {
+                        return res.status(200).json({ success: false,data: "deslogado" });
+                    }
+
+
+
+            });
+        }else{
+             return res.status(500).json({data:"Mande todos os dados requeridos!"});
+        }
+         }else{
+            return res.status(500).json({success:true,data:"Por favor envie um json e na requisição insira no headers content-type application/json"});
+        } 
         
     });
 });
@@ -103,6 +126,7 @@ router.post('/usuario/', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
+        if(req.headers['content-type']!="application/json"){
         if(!req.body.login && !req.body.senha && !req.body.nome){
             const data = { login: req.body.login, senha: ssha256.create(req.body.senha), nome: req.body.nome };
             const query = client.query("Insert into users values($1,$2,$3)", [data.login, data.senha, data.nome], (err, resp) => {
@@ -116,7 +140,10 @@ router.post('/usuario/', function(req, res, next) {
             });
         }else{
              return res.status(500).json({data:"Mande todos os dados requeridos!"});
-        }    
+        } 
+        }else{
+            return res.status(500).json({success:true,data:"Por favor envie um json e na requisição insira no headers content-type application/json"});
+        } 
     });
 });
 router.delete('/usuario/:login', function(req, res, next) {
@@ -145,6 +172,7 @@ router.put('/usuario/:login', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
+        if(req.headers['content-type']!="application/json"){
         if(!req.body.senha && !req.body.nome){
             const id = { login: req.params.login };
             const data2 = { nome: req.body.nome, senha: ssha256.create(req.body.senha) };
@@ -160,6 +188,9 @@ router.put('/usuario/:login', function(req, res, next) {
         }else{
              return res.status(500).json({data:"Mande todos os dados requeridos!"});
         }
+             }else{
+            return res.status(500).json({success:true,data:"Por favor envie um json e na requisição insira no headers content-type application/json"});
+        } 
     });
 });
 router.get('/:id', function(req, res, next) {
@@ -214,6 +245,7 @@ router.post('/', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
+        if(req.headers['content-type']!="application/json"){
         if(!req.body.title && !req.body.dono && !req.body.artigo){
             const data = { title: req.body.title, dono: req.body.dono, artigo: req.body.artigo };
             const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo) VALUES($1,$2,$3)", [data.title, data.dono, data.artigo], (err, resp) => {
@@ -227,7 +259,10 @@ router.post('/', function(req, res, next) {
             });
         }else{
              return res.status(500).json({data:"Mande todos os dados requeridos!"});
-        }    
+        }   
+         }else{
+            return res.status(500).json({success:true,data:"Por favor envie um json e na requisição insira no headers content-type application/json"});
+        }     
     });
 });
 router.delete('/:id', function(req, res, next) {
@@ -260,6 +295,7 @@ router.put('/:id', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
+        if(req.headers['content-type']!="application/json"){
         if(!req.body.title && !req.body.dono && !req.body.artigo){
             const id = { id: req.params.id };
             const data2 = { title: req.body.titulo, dono: req.body.dono, artigo: req.body.artigo };
@@ -275,6 +311,9 @@ router.put('/:id', function(req, res, next) {
         }else{
              return res.status(500).json({data:"Mande todos os dados requeridos!"});
         } 
+        }else{
+            return res.status(500).json({success:true,data:"Por favor envie um json e na requisição insira no headers content-type application/json"});
+        }    
     });
 });
 
