@@ -91,20 +91,8 @@ router.post('/usuario/logar/', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        if(!req.body.login && !req.body.senha){
-            const data = { login: req.body.login, senha: ssha256.create(req.body.senha) };
-            const query = client.query("select senha from users where login=$1", [data.login], (err, resp) => {
-                    if (err) {
-                    return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
-                    done();
-                     }        
-                   return res.status(200).json({ success: false,data:resp.rows })
-
-
-
-
-
-            });
+        return res.json(req.headers);
+        
         }else{
              return res.status(500).json({data:"Mande todos os dados requeridos!"});
         }
