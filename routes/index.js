@@ -91,7 +91,7 @@ router.post('/usuario/logar/', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        if(req.headers['content-type']!="application/json"){
+        if(req.headers['Content-Type']!="application/json"){
         if(!req.body.login && !req.body.senha){
             const data = { login: req.body.login, senha: ssha256.create(req.body.senha) };
             const query = client.query("select senha from users where login=$1", [data.login], (err, resp) => {
