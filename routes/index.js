@@ -93,9 +93,6 @@ router.post('/usuario/logar/', function(req, res, next) {
         }
         return res.json(req.headers);
         
-        }else{
-             return res.status(500).json({data:"Mande todos os dados requeridos!"});
-        }
         
     });
 });
