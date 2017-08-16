@@ -92,7 +92,7 @@ router.post('/usuario/logar/', function(req, res, next) {
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
         if(req.headers['Content-Type']!="application/json"){
-        if(req.body.login!=undefined && req.body.senha!=undefined){
+        if(req.body.login!=undefined && req.body.senha!=undefined && req.body.login!=null && req.body.senha!=null){
             const data = { login: req.body.login, senha: ssha256.create(req.body.senha) };
             const query = client.query("select senha from users where login=$1", [data.login], (err, resp) => {
                     if (err) {
@@ -126,7 +126,7 @@ router.post('/usuario/', function(req, res, next) {
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
         if(req.headers['Content-Type']!="application/json"){
-        if(!req.body.login && !req.body.senha && !req.body.nome){
+        if(req.body.login!=undefined && req.body.senha!=undefined && req.body.login!=null && req.body.senha!=null && req.body.nome!=undefined req.body.nome!=null){){
             const data = { login: req.body.login, senha: ssha256.create(req.body.senha), nome: req.body.nome };
             const query = client.query("Insert into users values($1,$2,$3)", [data.login, data.senha, data.nome], (err, resp) => {
                 if (err) {
@@ -172,7 +172,7 @@ router.put('/usuario/:login', function(req, res, next) {
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
         if(req.headers['Content-Type']!="application/json"){
-        if(!req.body.senha && !req.body.nome){
+        if(req.body.senha!=undefined && req.body.senha!=null && req.body.nome!=undefined req.body.nome!=null){
             const id = { login: req.params.login };
             const data2 = { nome: req.body.nome, senha: ssha256.create(req.body.senha) };
             const query = client.query("UPDATE users SET nome = $1 , senha = $2 where login= $3 ", [data2.nome, data2.senha, id.login], (err, resp) => {
@@ -245,7 +245,7 @@ router.post('/', function(req, res, next) {
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
         if(req.headers['Content-Type']!="application/json"){
-        if(!req.body.title && !req.body.dono && !req.body.artigo){
+        if(req.body.title!=undefined && req.body.dono!=undefined && req.body.artigo!=undefined && req.body.title!=null && req.body.dono!=null && req.body.artigo!=null){
             const data = { title: req.body.title, dono: req.body.dono, artigo: req.body.artigo };
             const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo) VALUES($1,$2,$3)", [data.title, data.dono, data.artigo], (err, resp) => {
                 if (err) {
@@ -295,7 +295,7 @@ router.put('/:id', function(req, res, next) {
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
         if(req.headers['Content-Type']!="application/json"){
-        if(!req.body.title && !req.body.dono && !req.body.artigo){
+        if(req.body.title!=undefined && req.body.dono!=undefined && req.body.artigo!=undefined && req.body.title!=null && req.body.dono!=null && req.body.artigo!=null){
             const id = { id: req.params.id };
             const data2 = { title: req.body.titulo, dono: req.body.dono, artigo: req.body.artigo };
             const query = client.query("UPDATE artigos SET titulo = $1 , dono = $2, artigo = $3  where id= $4 ", [data2.title, data2.dono, data2.artigo, id.id], (err, resp) => {
