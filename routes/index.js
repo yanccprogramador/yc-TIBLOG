@@ -99,7 +99,6 @@ router.post('/usuario/logar/', function(req, res, next) {
                     return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
                     done();
                      }        
-                   return res.status(200).json({ success: false,data:resp.rows })
 
                      if (ssha256.check(resp.rows[0].senha,req.body.senha)){
                         return res.status(201).json({ success: true, data: "logado" });
