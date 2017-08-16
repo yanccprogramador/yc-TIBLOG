@@ -126,7 +126,7 @@ router.post('/usuario/', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        if(req.headers['content-type']!="application/json"){
+        if(req.headers['Content-Type']!="application/json"){
         if(!req.body.login && !req.body.senha && !req.body.nome){
             const data = { login: req.body.login, senha: ssha256.create(req.body.senha), nome: req.body.nome };
             const query = client.query("Insert into users values($1,$2,$3)", [data.login, data.senha, data.nome], (err, resp) => {
@@ -172,7 +172,7 @@ router.put('/usuario/:login', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        if(req.headers['content-type']!="application/json"){
+        if(req.headers['Content-Type']!="application/json"){
         if(!req.body.senha && !req.body.nome){
             const id = { login: req.params.login };
             const data2 = { nome: req.body.nome, senha: ssha256.create(req.body.senha) };
@@ -245,7 +245,7 @@ router.post('/', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        if(req.headers['content-type']!="application/json"){
+        if(req.headers['Content-Type']!="application/json"){
         if(!req.body.title && !req.body.dono && !req.body.artigo){
             const data = { title: req.body.title, dono: req.body.dono, artigo: req.body.artigo };
             const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo) VALUES($1,$2,$3)", [data.title, data.dono, data.artigo], (err, resp) => {
@@ -295,7 +295,7 @@ router.put('/:id', function(req, res, next) {
             done();
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
-        if(req.headers['content-type']!="application/json"){
+        if(req.headers['Content-Type']!="application/json"){
         if(!req.body.title && !req.body.dono && !req.body.artigo){
             const id = { id: req.params.id };
             const data2 = { title: req.body.titulo, dono: req.body.dono, artigo: req.body.artigo };
