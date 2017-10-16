@@ -113,7 +113,7 @@ router.post('/usuario/logar/', function(req, res, next) {
              return res.status(500).json({data:"Mande todos os dados requeridos!"});
         }
          }else{
-            return res.status(500).json({success:true,data:"Por favor envie um json e na requisição insira no headers content-type application/json"});
+            return res.status(500).json({success:false,data:"Por favor envie um json e na requisição insira no headers content-type application/json"});
         } 
         
     });
