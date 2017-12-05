@@ -295,7 +295,7 @@ router.put('/:id', function(req, res, next) {
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
         if(req.headers['Content-Type']!="application/json"){
-        if(req.body.titulo!=undefined && req.body.dono!=undefined && req.body.artigo!=undefined && req.body.title!=null && req.body.dono!=null && req.body.artigo!=null){
+        if(req.body.titulo!=undefined && req.body.dono!=undefined && req.body.artigo!=undefined && req.body.titulo!=null && req.body.dono!=null && req.body.artigo!=null){
             const id = { id: req.params.id };
             const data2 = { title: req.body.titulo, dono: req.body.dono, artigo: req.body.artigo };
             const query = client.query("UPDATE artigos SET titulo = $1 , dono = $2, artigo = $3  where id= $4 ", [data2.title, data2.dono, data2.artigo, id.id], (err, resp) => {
