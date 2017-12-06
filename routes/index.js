@@ -15,8 +15,8 @@ router.get('/search/:pc', function(req, res, next) {
         const search = { pc: req.params.pc };
         const query = client.query("select * from artigos where artigo ~*$1 OR Titulo ~*$1 order by id desc", [search.pc], (err, resp) => {
             if (err) {
-                done();
                 console.log(err.stack);
+                done();
                 return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
             } else {
                 done();
