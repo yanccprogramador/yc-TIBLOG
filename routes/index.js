@@ -286,6 +286,7 @@ router.post('/', function (req, res, next) {
     });
 });
 router.post('/array', function (req, res, next) {
+    req.body.map(function (body) {
     pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
         if (err) {
@@ -293,7 +294,7 @@ router.post('/array', function (req, res, next) {
             return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
         }
         if (req.headers['Content-Type'] != "application/json") {
-            req.body.map(function (body) {
+           
                 if (body.title != undefined && body.dono != undefined && body.artigo != undefined && body.title != null && body.dono != null && body.artigo != null) {
                     var slug = split(' ', req.body.title);
                     const data = { title: body.title, dono:body.dono, artigo: body.artigo, slug: slug.join('-') };
@@ -311,12 +312,13 @@ router.post('/array', function (req, res, next) {
                     done();
                     return res.status(500).json({ data: "Mande todos os dados requeridos!" });
                 }
-            });
+            
         } else {
             done();
             return res.status(500).json({ success: true, data: "Por favor envie um json e na requisição insira no headers content-type application/json" });
         }
     });
+});
 });
 router.delete('/:id', function (req, res, next) {
     pg.connect(connectionString, (err, client, done) => {
