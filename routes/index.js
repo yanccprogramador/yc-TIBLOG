@@ -296,7 +296,7 @@ router.post('/array', function (req, res, next) {
         if (req.headers['Content-Type'] != "application/json") {
            
                 if (body.title != undefined && body.dono != undefined && body.artigo != undefined && body.title != null && body.dono != null && body.artigo != null) {
-                    var slug = split(' ', req.body.title);
+                    var slug = split(' ', body.title);
                     const data = { title: body.title, dono:body.dono, artigo: body.artigo, slug: slug.join('-') };
                     const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo,slug) VALUES($1,$2,$3,$4)", [data.title, data.dono, data.artigo, data.slug], (err, resp) => {
                         if (err) {
