@@ -263,8 +263,9 @@ router.post('/', function(req, res, next) {
         }
         if(req.headers['Content-Type']!="application/json"){
         if(req.body.title!=undefined && req.body.dono!=undefined && req.body.artigo!=undefined && req.body.title!=null && req.body.dono!=null && req.body.artigo!=null){
-            const data = { title: req.body.title, dono: req.body.dono, artigo: req.body.artigo };
-            const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo) VALUES($1,$2,$3)", [data.title, data.dono, data.artigo], (err, resp) => {
+            var slug=split(' ',req.body.title);
+            const data = { title: req.body.title, dono: req.body.dono, artigo: req.body.artigo,slug:slug.join('-') };
+            const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo,slug) VALUES($1,$2,$3,$4)", [data.title, data.dono, data.artigo,data.slug], (err, resp) => {
                 if (err) {
                     done();
                     console.log(err.stack);
