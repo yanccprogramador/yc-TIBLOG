@@ -207,6 +207,66 @@ router.put('/usuario/:login', function (req, res, next) {
         }
     });
 });
+router.post('/array', function (req, res, next) {
+    req.body.map(function (body) {
+        pg.connect(connectionString, (err, client, done) => {
+            // Handle connection errors
+            if (err) {
+                done();
+                return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
+            }
+            if (req.headers['Content-Type'] != "application/json") {
+
+                if (body.title != undefined && body.dono != undefined && body.artigo != undefined && body.title != null && body.dono != null && body.artigo != null) {
+                    var slug = body.title.split(' ');
+                    const data = { title: body.title, dono: body.dono, artigo: body.artigo, slug: slug.join('-') };
+                    const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo,slug) VALUES($1,$2,$3,$4)", [data.title, data.dono, data.artigo, data.slug], (err, resp) => {
+                        if (err) {
+                            done();
+                            console.log(err.stack);
+                            return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
+                        } else {
+                            done();
+                            return res.status(201).json({ success: true, data: "inserted" });
+                        }
+                    });
+                } else {
+                    done();
+                    return res.status(500).json({ data: "Mande todos os dados requeridos!" });
+                }
+
+            } else {
+                done();
+                return res.status(500).json({ success: true, data: "Por favor envie um json e na requisição insira no headers content-type application/json" });
+            }
+        });
+    });
+});
+
+router.get('/slug/:slug', function (req, res, next) {
+    var results = [];
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if (err) {
+            done();
+            return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
+        }
+        const id = { id: req.params.slug };
+        // SQL Query > Select Data
+        const query = client.query("select * from artigos where slug=$1", [id.id], (err, resp) => {
+            if (err) {
+                done();
+                console.log(err.stack);
+                return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
+            } else {
+                done();
+                return res.status(200).json({ success: true, rows: resp.rows, where: true, numLinhas: resp.rowCount });
+            }
+        });
+    });
+    //return res.status(200).json({success:true,rows:results});
+});
 router.get('/:id', function (req, res, next) {
     var results = [];
     // Get a Postgres client from the connection pool
@@ -283,41 +343,6 @@ router.post('/', function (req, res, next) {
             done();
             return res.status(500).json({ success: true, data: "Por favor envie um json e na requisição insira no headers content-type application/json" });
         }
-    });
-});
-router.post('/array', function (req, res, next) {
-    req.body.map(function (body) {
-        pg.connect(connectionString, (err, client, done) => {
-            // Handle connection errors
-            if (err) {
-                done();
-                return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
-            }
-            if (req.headers['Content-Type'] != "application/json") {
-
-                if (body.title != undefined && body.dono != undefined && body.artigo != undefined && body.title != null && body.dono != null && body.artigo != null) {
-                    var slug = body.title.split(' ');
-                    const data = { title: body.title, dono: body.dono, artigo: body.artigo, slug: slug.join('-') };
-                    const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo,slug) VALUES($1,$2,$3,$4)", [data.title, data.dono, data.artigo, data.slug], (err, resp) => {
-                        if (err) {
-                            done();
-                            console.log(err.stack);
-                            return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
-                        } else {
-                            done();
-                            return res.status(201).json({ success: true, data: "inserted" });
-                        }
-                    });
-                } else {
-                    done();
-                    return res.status(500).json({ data: "Mande todos os dados requeridos!" });
-                }
-
-            } else {
-                done();
-                return res.status(500).json({ success: true, data: "Por favor envie um json e na requisição insira no headers content-type application/json" });
-            }
-        });
     });
 });
 router.delete('/:id', function (req, res, next) {
