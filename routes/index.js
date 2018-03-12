@@ -287,17 +287,17 @@ router.post('/', function (req, res, next) {
 });
 router.post('/array', function (req, res, next) {
     req.body.map(function (body) {
-    pg.connect(connectionString, (err, client, done) => {
-        // Handle connection errors
-        if (err) {
-            done();
-            return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
-        }
-        if (req.headers['Content-Type'] != "application/json") {
-           
+        pg.connect(connectionString, (err, client, done) => {
+            // Handle connection errors
+            if (err) {
+                done();
+                return res.status(500).json({ success: false, data: "Tente novamente, erro de conexão!" });
+            }
+            if (req.headers['Content-Type'] != "application/json") {
+
                 if (body.title != undefined && body.dono != undefined && body.artigo != undefined && body.title != null && body.dono != null && body.artigo != null) {
-                    var slug = split(' ', body.title);
-                    const data = { title: body.title, dono:body.dono, artigo: body.artigo, slug: slug.join('-') };
+                    var slug = body.title.split(' ');
+                    const data = { title: body.title, dono: body.dono, artigo: body.artigo, slug: slug.join('-') };
                     const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo,slug) VALUES($1,$2,$3,$4)", [data.title, data.dono, data.artigo, data.slug], (err, resp) => {
                         if (err) {
                             done();
@@ -312,13 +312,13 @@ router.post('/array', function (req, res, next) {
                     done();
                     return res.status(500).json({ data: "Mande todos os dados requeridos!" });
                 }
-            
-        } else {
-            done();
-            return res.status(500).json({ success: true, data: "Por favor envie um json e na requisição insira no headers content-type application/json" });
-        }
+
+            } else {
+                done();
+                return res.status(500).json({ success: true, data: "Por favor envie um json e na requisição insira no headers content-type application/json" });
+            }
+        });
     });
-});
 });
 router.delete('/:id', function (req, res, next) {
     pg.connect(connectionString, (err, client, done) => {
