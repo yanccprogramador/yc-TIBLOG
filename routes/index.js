@@ -323,7 +323,7 @@ router.post('/', function (req, res, next) {
         }
         if (req.headers['Content-Type'] != "application/json") {
             if (req.body.title != undefined && req.body.dono != undefined && req.body.artigo != undefined && req.body.title != null && req.body.dono != null && req.body.artigo != null) {
-                var slug = split(' ', req.body.title);
+                var slug = req.body.title.split(' ');
                 const data = { title: req.body.title, dono: req.body.dono, artigo: req.body.artigo, slug: slug.join('-') };
                 const query = client.query("INSERT INTO artigos(Titulo,Dono,artigo,slug) VALUES($1,$2,$3,$4)", [data.title, data.dono, data.artigo, data.slug], (err, resp) => {
                     if (err) {
