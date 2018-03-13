@@ -227,7 +227,6 @@ router.post('/array', function (req, res, next) {
                             return res.status(400).json({ success: false, data: "Erro de query, verifique os dados e tente novamente!" });
                         } else {
                             done();
-                            return res.status(201).json({ success: true, data: "inserted" });
                         }
                     });
                 } else {
@@ -241,6 +240,7 @@ router.post('/array', function (req, res, next) {
             }
         });
     });
+    return res.status(201).json({ success: true, data: "inserted" });
 });
 
 router.get('/slug/:slug', function (req, res, next) {
